@@ -11,7 +11,9 @@ exports.fetchPokemon = async (name) => {
     return {
       id: data.id,
       name: data.name,
-      types: data.types.map(t => t.type.name)
+      types: data.types.map(t => t.type.name),
+      image: data.sprites.other['official-artwork'].front_default
+
     };
   } catch (err) {
     const error = new Error('PokeAPI-opslag mislykkedes');

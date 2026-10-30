@@ -5,7 +5,8 @@ const favoriteRoutes = require('./routes/favoriteRoutes');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
-app.use(express.json());               // Læs JSON fra POST/PUT
+app.use(express.json());// Læs JSON fra POST/PUT
+app.use(express.static('public'));
 app.use(morgan('dev'));                // Log requests før routes
 app.use('/pokemon', pokemonRoutes);    // Eksternt PokeAPI
 app.use('/favorites', favoriteRoutes); // Vores egen CRUD
