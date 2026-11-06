@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 const pokemonRoutes = require('./routes/pokemonRoutes');
 const favoriteRoutes = require('./routes/favoriteRoutes');
 const errorHandler = require('./middleware/errorHandler');
@@ -10,6 +11,12 @@ app.use(express.static('public'));
 app.use(morgan('dev'));                // Log requests før routes
 app.use('/pokemon', pokemonRoutes);    // Eksternt PokeAPI
 app.use('/favorites', favoriteRoutes); // Vores egen CRUD
+mongoose.connect('mongodb://127.0.0.1:27017/pokemonDB')
+.then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
+
+
 
 // Ukendt endpoint: 404 (efter routes, før error-handler)
 app.use((req, res) => res.status(404).json({ error: 'Endpoint findes ikke' }));

@@ -8,10 +8,12 @@ const favoritesButton = document.getElementById('favoritesButton');
 const showfavoritesButton = document.getElementById('showFavoritesButton');
 const favoritesList = document.getElementById('favoritesList');
 const favoritesTitle = document.getElementById('favoritesTitle');
+let currentPokemon = null;
 
 searchButton.addEventListener('click', async () => {
   const pokemonNameToSearch = searchField.value.trim();
   errorMessage.textContent = '';
+  currentPokemon = null;
 
   if (!pokemonNameToSearch) {
     errorMessage.textContent = 'Please enter a Pokémon name';
@@ -31,6 +33,7 @@ searchButton.addEventListener('click', async () => {
       return;
     }
 
+    currentPokemon = data;
     pokemonImage.src = data.image;
     pokemonImage.style.display = 'block';
     pokemonName.textContent = data.name;
@@ -42,10 +45,9 @@ searchButton.addEventListener('click', async () => {
 });
 
 favoritesButton.addEventListener('click', async () => {
-  const name = pokemonName.textContent.trim();
   errorMessage.textContent = '';
 
-  if (!name) {
+  if (!currentPokemon) {
     errorMessage.textContent = 'Search for a Pokémon before saving it';
     return;
   }
@@ -56,7 +58,11 @@ favoritesButton.addEventListener('click', async () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name })
+      body: JSON.stringify({
+        id: currentPokemon.id,
+        name: currentPokemon.name,
+        image: currentPokemon.image
+      })
     });
     const data = await response.json();
 
@@ -110,7 +116,11 @@ showfavoritesButton.addEventListener('click', async () => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name: updatedName.trim() })
+            body: JSON.stringify({
+              id: favorite.id,
+              name: updatedName.trim(),
+              image: favorite.image
+            })
           });
           const updateData = await updateResponse.json();
 
